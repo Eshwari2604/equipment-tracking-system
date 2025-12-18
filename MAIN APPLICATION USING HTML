@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Equipment Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>Equipment Tracker</h2>
+
+<form method="post">
+    <input type="hidden" name="id" value="<?= $edit['id'] ?? '' ?>">
+
+    <input type="text" name="name" placeholder="Equipment Name"
+           value="<?= $edit['name'] ?? '' ?>" required>
+
+    <select name="type" required>
+        <option value="">Select Type</option>
+        <?php
+        $types = ['Machine','Vessel','Tank','Mixer'];
+        foreach ($types as $t) {
+            $sel = ($edit['type'] ?? '') == $t ? 'selected' : '';
+            echo "<option $sel>$t</option>";
+        }
+        ?>
+    </select>
+
+    <select name="status" required>
+        <option value="">Select Status</option>
+        <?php
+        $statuses = ['Active','Inactive','Under Maintenance'];
+        foreach ($statuses as $s) {
+            $sel = ($edit['status'] ?? '') == $s ? 'selected' : '';
+            echo "<option $sel>$s</option>";
+        }
+        ?>
+    </select>
+
+    <input type="date" name="last_cleaned"
+           value="<?= $edit['last_cleaned'] ?? '' ?>" required>
+
+    <button type="submit" name="save">
+        <?= $edit ? 'Update' : 'Add' ?> Equipment
+    </button>
+</form>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Status</th>
+        <th>Last Cleaned</th>
+        <th>Actions</th>
+    </tr>
+
+    <?php
+    $result = $conn->query("SELECT * FROM equipment");
+    while ($row = $result->fetch_assoc()) {
+        echo "<tr>
+                <td>{$row['name']}</td>
+                <td>{$row['type']}</td>
+                <td>{$row['status']}</td>
+                <td>{$row['last_cleaned']}</td>
+                <td>
+                    <a href='?edit={$row['id']}'>Edit</a> |
+                    <a href='?delete={$row['id']}'
+                       onclick='return confirm(\"Delete this item?\")'>Delete</a>
+                </td>
+              </tr>";
+    }
+    ?>
+</table>
+
+</body>
+</html>
