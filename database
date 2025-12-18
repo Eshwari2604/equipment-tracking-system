@@ -1,0 +1,12 @@
+equipment.sql
+CREATE DATABASE equipment_db;
+
+USE equipment_db;
+
+CREATE TABLE equipment (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    type ENUM('Machine','Vessel','Tank','Mixer') NOT NULL,
+    status ENUM('Active','Inactive','Under Maintenance') NOT NULL,
+    last_cleaned DATE NOT NULL
+);
