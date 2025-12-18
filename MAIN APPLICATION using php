@@ -1,0 +1,28 @@
+index.php
+<?php
+include 'db.php';
+if (isset($_POST['save'])) {
+    $id = $_POST['id'];
+    $name = $_POST['name'];
+    $type = $_POST['type'];
+    $status = $_POST['status'];
+    $date = $_POST['last_cleaned'];
+
+    if ($id == "") {
+        $conn->query("INSERT INTO equipment (name,type,status,last_cleaned)
+                      VALUES ('$name','$type','$status','$date')");
+    } else {
+        $conn->query("UPDATE equipment SET
+                      name='$name', type='$type', status='$status', last_cleaned='$date'
+                      WHERE id=$id");
+    }
+}
+if (isset($_GET['delete'])) {
+    $conn->query("DELETE FROM equipment WHERE id=".$_GET['delete']);
+}
+$edit = null;
+if (isset($_GET['edit'])) {
+    $edit = $conn->query("SELECT * FROM equipment WHERE id=".$_GET['edit'])->fetch_assoc();
+}
+?>
+
